@@ -1,0 +1,6 @@
+toyota camry silver 60 2000 4 
+honda civic blue 50 3000 5 
+ford mustang red 80 5000 9 
+nissan altima white 75 3000 6 
+BMW 3series gray 50 7000 2 
+tesla models blue 45 8000 4 
