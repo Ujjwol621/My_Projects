@@ -1,0 +1,80 @@
+<fg>
+    <h1>Create Assignment for {{ subject.name }} in {{ channel.name }}</h1>
+    
+    <form method="post" enctype="multipart/form-data" class="create-assignment-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="create-btn">Create Assignment</button>
+    </form>
+</fg>
+
+<style>
+    fg {
+        display: block;
+        background-color: #1F2937; /* Dark background */
+        color: #FFFFFF; /* White text */
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+        margin: 20px auto;
+        max-width: 600px;
+        text-align: center;
+    }
+
+    fg h1 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        color: #FFFFFF; /* White heading */
+    }
+
+    /* Form Styles */
+    .create-assignment-form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        text-align: left;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .create-assignment-form label {
+        font-size: 1rem;
+        margin-bottom: 5px;
+        color: #E5E7EB;
+    }
+
+    .create-assignment-form input,
+    .create-assignment-form textarea,
+    .create-assignment-form select {
+        width: 100%;
+        padding: 10px;
+        background-color: #374151; /* Slightly lighter background */
+        color: #FFFFFF;
+        border: 1px solid #4B5563;
+        border-radius: 5px;
+        font-size: 1rem;
+        box-sizing: border-box;
+    }
+
+    .create-assignment-form input:hover,
+    .create-assignment-form textarea:hover,
+    .create-assignment-form select:hover {
+        border-color: #6B7280; /* Lighter border on hover */
+    }
+
+    .create-assignment-form button.create-btn {
+        padding: 10px 15px;
+        background-color: #4CAF50; /* Green button */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+    }
+
+    .create-assignment-form button.create-btn:hover {
+        background-color: #45a049; /* Darker green hover */
+    }
+</style>

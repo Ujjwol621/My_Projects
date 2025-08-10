@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block layout %}
+<channel>
+    <h1>Welcome, {{ user.username }}</h1>
+
+    {% if channels %}
+        <h2>Your Channels:</h2>
+        <ul>
+            {% for channel in channels %}
+                <li>
+                    <a href="{% url 'user_subjects' channel.id %}" class="channel-link">
+                        {{ channel.name }}
+                    </a>
+                </li>
+            {% empty %}
+                <p class="empty-message">You are not part of any channels.</p>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="empty-message">You are not assigned to any channels yet.</p>
+    {% endif %}
+</channel>
+
+<style>
+    channel {
+        display: block;
+        background-color: #1F2937; /* Same as nav bar color */
+        color: #FFFFFF; /* White text */
+        padding: 20px;
+        border-radius: 12px; /* Rounded corners for the entire section */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+        margin: 20px auto;
+        max-width: 800px;
+        text-align: center; /* Center-align text inside */
+    }
+
+    channel h1, channel h2 {
+        color: #FFFFFF; /* White headings */
+    }
+
+    channel ul {
+        list-style-type: none; /* Remove bullet points */
+        padding: 0;
+        margin: 10px 0;
+    }
+
+    channel li {
+        margin: 10px 0; /* Space between each channel */
+    }
+
+    a.channel-link {
+        display: inline-block;
+        background-color: #374151; /* Slightly lighter than container */
+        color: #FFFFFF; /* White text */
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        transition: background-color 0.3s, transform 0.3s;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* Add shadow for emphasis */
+    }
+
+    a.channel-link:hover {
+        background-color: #4B5563; /* Hover color */
+        transform: translateY(-2px); /* Slight lift on hover */
+    }
+</style>
+{% endblock %}

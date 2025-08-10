@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block layout %}
+<subject-general>
+    <h1>Members of {{ subject.name }} in {{ channel.name }}</h1>
+
+    <nav>
+        <a href="{% url 'subject_general' channel.id subject.id %}" class="nav-link" style="float: left;">
+            <img src="{% static 'images/previous.png' %}" alt="Back" style="height: 30px; width: 30px;">
+        </a>
+        <a href="{% url 'subject_general' channel.id subject.id %}" class="nav-link">General</a>
+        <a href="{% url 'subject_files' channel.id subject.id %}" class="nav-link">Files</a>
+        {% if user.is_staff %}
+        <!-- For Staff: Link to staff assignments view -->
+        <a href="{% url 'staff_view_assignments' channel.id subject.id %}">Assignments</a>
+        {% else %}
+        <!-- For Non-Staff: Link to student assignments view -->
+        <a href="{% url 'view_assignment' channel.id subject.id %}">Assignments</a>
+        {% endif %}
+    </nav>
+
+    <!-- Members Section -->
+    <div id="view-admins">
+        <ul>
+            <h2>--------Admins--------</h2>
+        {% for member in admins %}
+        <li>
+            {{ forloop.counter }}. <a href="{% url 'profile' member.username %}">{{ member.username }}</a>
+        </li>
+        {% endfor %}
+        </ul>
+    </div>
+</subject-general>
+
+<style>
+    subject-general {
+    display: block;
+    background-color: #2D3748; /* Slightly lighter dark background */
+    color: #E2E8F0; /* Softer white text */
+    padding: 25px; /* Increased padding for better spacing */
+    border-radius: 16px; /* More rounded corners */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25); /* Slightly stronger shadow for more depth */
+    margin: 25px auto; /* Increased margin for better spacing from other elements */
+    max-width: 920px; /* Slightly wider maximum width */
+    text-align: center;
+    border: 1px solid #4A5568; /* Added border for better distinction */
+}
+    subject-general h1, subject-general h2 {
+        color: #FFFFFF;
+    }
+
+    subject-general nav {
+        background-color: #374151; /* Lighter than main background */
+        padding: 10px;
+        margin-top: 20px;
+        border-radius: 8px;
+    }
+
+    subject-general nav a {
+        color: #FFFFFF;
+        margin: 0 15px;
+        text-decoration: none;
+        font-size: 1.2rem;
+    }
+
+    subject-general nav a:hover {
+        text-decoration: none;
+        color: #E5E7EB; /* Light hover effect */
+    }
+
+    subject-general .content-wrapper {
+        margin-top: 20px;
+        text-align: left;
+    }
+
+    subject-general .post {
+        background-color: #374151; /* Dark background for each post */
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    subject-general .post h4 {
+        margin-top: 20px;
+        font-size: 1.2rem;
+        color: #E5E7EB;
+    }
+
+    subject-general .reply {
+        margin-top: 10px;
+        padding-left: 20px;
+        border-left: 2px solid #E5E7EB;
+    }
+
+    subject-general textarea {
+        background-color: #374151; /* Matching background */
+        color: #FFFFFF; /* White text */
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+    }
+
+    subject-general textarea:hover {
+        border-color: #4B5563; /* Slightly lighter border on hover */
+    }
+
+    subject-general button {
+        padding: 10px 15px;
+        background-color: #4CAF50; /* Green button for replies */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    subject-general button:hover {
+        background-color: #45a049; /* Hover effect */
+    }
+
+    subject-general form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 600px;
+        margin: 20px 0;
+    }
+</style>
+{% endblock %}
+

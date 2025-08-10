@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% block layout %}
+<submissions>
+    <h1>Submissions for Assignment: {{ assignment.title }}</h1>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="{% url 'subject_general' channel.id subject.id %}" class="nav-link">General</a>
+        <a href="{% url 'subject_files' channel.id subject.id %}" class="nav-link">Files</a>
+        {% if user.is_staff %}
+        <!-- For Staff: Link to staff assignments view -->
+        <a href="{% url 'staff_view_assignments' channel.id subject.id %}">Assignments</a>
+        {% else %}
+        <!-- For Non-Staff: Link to student assignments view -->
+        <a href="{% url 'view_assignment' channel.id subject.id %}">Assignments</a>
+        {% endif %}    
+    </nav>
+
+    <div class="assignment-details">
+        <p><strong>Due Date:</strong> {{ assignment.due_date }}</p>
+    </div>
+
+    {% if submission_dict %}
+        <div class="submission-list">
+            <ul>
+                {% for submission in submission_dict.values %}
+                    <li>
+                        <strong>Submitted by:</strong> {{ submission.submitted_by }}
+                        <br>
+                        <strong>Submission Date:</strong> {{ submission.submitted_at }}
+                        <br>
+                        {% if submission.file_url %}
+                            <a href="{{ submission.file_url }}" target="_blank" class="download-link">Download File</a>
+                        {% else %}
+                            <span class="no-file">No file uploaded</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% else %}
+        <p class="no-submissions">No submissions have been made yet.</p>
+    {% endif %}
+</submissions>
+
+<style>
+    submissions {
+        display: block;
+        background-color: #1F2937; /* Dark background */
+        color: #FFFFFF; /* White text */
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+        margin: 20px auto;
+        max-width: 900px;
+        text-align: center;
+    }
+
+    submissions h1 {
+        color: #FFFFFF; /* White heading */
+    }
+
+    /* Navigation Bar Styles */
+    submissions nav {
+        background-color: #374151; /* Slightly lighter than the main background */
+        padding: 10px;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+    }
+
+    submissions nav a {
+        color: #FFFFFF;
+        margin: 0 15px;
+        text-decoration: none;
+        font-size: 1.2rem;
+    }
+
+    submissions nav a:hover {
+        text-decoration: none;
+        color: #E5E7EB; /* Light hover effect */
+    }
+
+    .assignment-details {
+        background-color: #374151; /* Slightly lighter background */
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        text-align: left;
+    }
+
+    .assignment-details p {
+        margin: 10px 0;
+        font-size: 1rem;
+    }
+
+    .submission-list ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        text-align: left;
+    }
+
+    .submission-list li {
+        background-color: #1F2937;
+        margin: 10px 0;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .download-link {
+        color: #4CAF50; /* Green link */
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .download-link:hover {
+        text-decoration: underline;
+        color: #45a049; /* Hover green */
+    }
+
+    .no-file {
+        color: #E53E3E; /* Red text */
+    }
+
+    .no-submissions {
+        font-size: 1.2rem;
+        color: #E5E7EB; /* Subtle gray */
+    }
+</style>
+{% endblock %}

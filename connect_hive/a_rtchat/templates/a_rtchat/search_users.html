@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block layout %}
+<div class="container mx-auto max-w-lg p-6">
+    <h1 class="text-2xl font-bold mb-6">Search Users</h1>
+    
+    <!-- Search Bar -->
+    <form method="get" id="search-form">
+        <div class="flex items-center">
+            <input 
+                type="text" 
+                name="q" 
+                value="{{ query }}" 
+                placeholder="Search for users by name..." 
+                class="flex-1 p-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring focus:ring-blue-300"
+                oninput="this.form.submit()"  <!-- Auto-submit when typing -->
+        </div>
+    </form>
+
+    
+
+    <!-- Search Results -->
+    {% if query and users %}
+        <ul class="bg-white rounded-lg shadow p-4 mt-4">
+            {% for user in users %}
+                <li class="flex justify-between items-center py-2 border-b border-gray-200">
+                    <span>{{ user.username }}</span>
+                    <a 
+                        href="{% url 'start-chat' user.username %}" 
+                        class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
+                    >
+                        Start Chat
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% elif query %}
+        <p class="text-gray-500 mt-4">No users found.</p>
+    {% endif %}
+</div>
+{% endblock %}

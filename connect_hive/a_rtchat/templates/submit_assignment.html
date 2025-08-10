@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+{% block layout %}
+<assignments>
+    <h1>Submit Assignment: {{ assignment.title }}</h1>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="{% url 'subject_general' channel.id subject.id %}" class="nav-link">General</a>
+        <a href="{% url 'subject_files' channel.id subject.id %}" class="nav-link">Files</a>
+        <a href="{% url 'view_assignment' channel.id subject.id %}" class="nav-link">Assignments</a>
+    </nav>
+
+    <div class="assignment-details">
+        <p><strong>Description:</strong> {{ assignment.description }}</p>
+        {% if assignment.file %}
+        <a href="{{ assignment.file.url }}" class="submit-btn" target="_blank">Download File</a><br>
+        {% endif %}
+        <p><strong>Due Date:</strong> {{ assignment.due_date }}</p>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="submission-form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="file">Upload File:</label>
+            <input type="file" name="file" id="file" required>
+        </div>
+        <button type="submit" class="submit-btn">Submit</button>
+    </form>
+</assignments>
+
+<style>
+    assignments {
+        display: block;
+        background-color: #1F2937; /* Dark background */
+        color: #FFFFFF; /* White text */
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+        margin: 20px auto;
+        max-width: 900px;
+        text-align: center;
+    }
+
+    assignments h1 {
+        color: #FFFFFF; /* White heading */
+    }
+
+    /* Navigation Bar Styles */
+    assignments nav {
+        background-color: #374151; /* Slightly lighter than the main background */
+        padding: 10px;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+    }
+
+    assignments nav a {
+        color: #FFFFFF;
+        margin: 0 15px;
+        text-decoration: none;
+        font-size: 1.2rem;
+    }
+
+    assignments nav a:hover {
+        text-decoration: underline;
+        color: #E5E7EB; /* Light hover effect */
+    }
+
+    assignments .assignment-details {
+        background-color: #374151; /* Slightly lighter than container */
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        text-align: left;
+    }
+
+    assignments .assignment-details p {
+        margin: 10px 0;
+        font-size: 1rem;
+    }
+
+    assignments .submission-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    assignments .submission-form .form-group {
+        width: 100%;
+        text-align: left;
+    }
+
+    assignments .submission-form label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 1rem;
+    }
+
+    assignments .submission-form input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        background-color: #374151;
+        color: #FFFFFF;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    assignments .submission-form input[type="file"]:hover {
+        border-color: #4B5563; /* Slightly lighter border on hover */
+    }
+
+    assignments .submission-form .submit-btn {
+        padding: 10px 15px;
+        background-color: #4CAF50; /* Green button */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    assignments .submission-form .submit-btn:hover {
+        background-color: #45a049; /* Hover color */
+    }
+</style>
+{% endblock %}

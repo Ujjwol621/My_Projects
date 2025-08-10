@@ -1,0 +1,23 @@
+<!-- some_template.html -->
+{% include 'includes/header.html' with room_name=room_name %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Call</title>
+</head>
+<body>
+    <h1>Welcome to the Call Page</h1>
+
+    <!-- Create a link to start the call with dynamic room name -->
+    <ul>
+        <li>
+            <a href="{% url 'call_view' room_name %}" class="text-white bg-blue-500 px-4 py-2 rounded">
+                Start Call
+            </a>
+        </li>
+    </ul>
+
+    <!-- Debug output to verify room_name -->
+    <p>Room Name: {{ room_name }}</p>
+</body>
+</html>

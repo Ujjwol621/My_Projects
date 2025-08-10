@@ -1,0 +1,229 @@
+{% extends 'base.html' %}
+{% load tz %}
+
+{% block layout %}
+<subject-general>
+    <h1>General - {{ subject.name }} in {{ channel.name }}</h1>
+
+    <nav>
+        <a href="{% url 'subject_general' channel.id subject.id %}" class="nav-link">General</a>
+        <a href="{% url 'subject_files' channel.id subject.id %}" class="nav-link">Files</a>
+        {% if user.is_staff %}
+        <!-- For Staff: Link to staff assignments view -->
+        <a href="{% url 'staff_view_assignments' channel.id subject.id %}">Assignments</a>
+        {% else %}
+        <!-- For Non-Staff: Link to student assignments view -->
+        <a href="{% url 'view_assignment' channel.id subject.id %}">Assignments</a>
+        {% endif %}
+        <!-- View Members Section with Dropdown -->
+        <div class="relative inline-block text-left">
+            <a href="#" onclick="toggleDropdown()">View Members</a>
+            <div id="dropdown" class="hidden absolute mt-2 w-56 bg-black text-gray-800 shadow-lg rounded-md z-10">
+                <!-- Admins Section -->
+                <div class="p-4 border-b">
+                    <h3 class="text-lg font-semibold">
+                        <a href="{% url 'view_admins' channel.id subject.id %}">Admins</a>
+                    </h3>
+                    <ul class="mt-2">
+                        {% for admin in admins %}
+                        <li class="hover:bg-gray-100 p-2 rounded-md">{{ admin.username }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <!-- Members Section -->
+                <div class="p-4 border-b">
+                    <h3 class="text-lg font-semibold">
+                        <a href="{% url 'view_members' channel.id subject.id %}">Members</a>
+                    </h3>
+                    <ul class="mt-2">
+                        {% for member in members %}
+                        <li class="hover:bg-gray-100 p-2 rounded-md">{{ member.username }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content-wrapper">
+        <!-- Posts Section -->
+        <h2>Posts</h2>
+        {% for post in posts %}
+            <div class="post">
+            {% if post.is_assignment_post %}
+                <p><strong>{{ post.author.username }}</strong>: {{ post.body }}</p>
+                <small>Posted on {{ post.created_at|timezone:"Asia/Kathmandu" }}</small>
+
+                {% if user.is_staff %}
+                    <!-- For Staff: Link to staff assignments view -->
+                    <a href="{% url 'staff_view_assignments' channel.id subject.id %}">
+                    <button type="submit">View Assignments</button>
+                    </a>
+                {% else %}
+                    <!-- For Non-Staff: Link to student assignments view -->
+                    <a href="{% url 'view_assignment' channel.id subject.id %}">
+                    <button type="submit">View Assignments</button>
+                    </a>
+                {% endif %}
+        {% else %}
+            <!-- Regular Post -->
+            <p><strong>{{ post.author.username }}</strong>: {{ post.body }}</p>
+            <small>Posted on {{ post.created_at }}</small>
+
+                <!-- Replies -->
+                {% if post.replies.all %}
+                    <h4>Replies:</h4>
+                    {% for reply in post.replies.all %}
+                        <div class="reply">
+                            <p><strong>{{ reply.author.username }}</strong>: {{ reply.body }}</p>
+                            <small>Replied on {{ reply.created_at|timezone:"Asia/Kathmandu" }}</small>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <!-- Reply Form -->
+                <form method="post" class="reply-form">
+                    {% csrf_token %}
+                    <textarea name="body" placeholder="Write your reply here..." required></textarea>
+                    <input type="hidden" name="parent_post" value="{{ post.id }}">
+                    <button type="submit">Reply</button>
+                </form>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <!-- Post Creation Section -->
+        <h2>Create a New Post</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Post</button>
+        </form>
+
+    </div>
+</subject-general>
+
+<style>
+    subject-general {
+        display: block;
+        background-color: #1F2937; /* Dark background, matching the nav bar */
+        color: #FFFFFF; /* White text */
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+        margin: 20px auto;
+        max-width: 900px;
+        text-align: center;
+    }
+
+    subject-general h1, subject-general h2 {
+        color: #FFFFFF;
+    }
+
+    subject-general nav {
+        background-color: #374151; /* Lighter than main background */
+        padding: 10px;
+        margin-top: 20px;
+        border-radius: 8px;
+    }
+
+    subject-general nav a {
+        color: #FFFFFF;
+        margin: 0 15px;
+        text-decoration: none;
+        font-size: 1.2rem;
+    }
+
+    subject-general nav a:hover {
+        text-decoration: none;
+        color: #E5E7EB; /* Light hover effect */
+    }
+
+    subject-general .content-wrapper {
+        margin-top: 20px;
+        text-align: left;
+    }
+
+    subject-general .post {
+        background-color: #374151; /* Dark background for each post */
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    subject-general .post h4 {
+        margin-top: 20px;
+        font-size: 1.2rem;
+        color: #E5E7EB;
+    }
+
+    subject-general .reply {
+        margin-top: 10px;
+        padding-left: 20px;
+        border-left: 2px solid #E5E7EB;
+    }
+
+    subject-general textarea {
+        background-color: #374151; /* Matching background */
+        color: #FFFFFF; /* White text */
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+    }
+
+    subject-general textarea:hover {
+        border-color: #4B5563; /* Slightly lighter border on hover */
+    }
+
+    subject-general button {
+        padding: 10px 15px;
+        background-color: #4CAF50; /* Green button for replies */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    subject-general button:hover {
+        background-color: #45a049; /* Hover effect */
+    }
+
+    subject-general form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 600px;
+        margin: 20px 0;
+    }
+</style>
+
+<style>
+    /* Dropdown Styling */
+    #dropdown {
+        display: none;
+    }
+
+    #dropdown.show {
+        display: block;
+    }
+</style>
+
+<script>
+    function toggleDropdown() {
+        const dropdown = document.getElementById("dropdown");
+        dropdown.classList.toggle("show");
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener("click", (e) => {
+        const dropdown = document.getElementById("dropdown");
+        if (!e.target.closest(".relative")) {
+            dropdown.classList.remove("show");
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% load static %}
+
+{% block layout %}
+<assignments>
+    <h1>Assignments for {{ subject.name }} in {{ channel.name }}</h1>
+    <nav>
+        <a href="{% url 'subject_general' channel.id subject.id %}" class="nav-link" style="float: left;">
+            <img src="{% static 'images/previous.png' %}" alt="Back" style="height: 30px; width: 30px;">
+        </a>
+        <a href="{% url 'subject_general' channel.id subject.id %}" class="nav-link">General</a>
+        <a href="{% url 'subject_files' channel.id subject.id %}" class="nav-link">Files</a>
+        {% if user.is_staff %}
+        <!-- For Staff: Link to staff assignments view -->
+        <a href="{% url 'staff_view_assignments' channel.id subject.id %}">Assignments</a>
+        {% else %}
+        <!-- For Non-Staff: Link to student assignments view -->
+        <a href="{% url 'view_assignment' channel.id subject.id %}">Assignments</a>
+        {% endif %}
+    </nav>
+
+    <div class="assignment-details">
+        <h2>Your Assignments</h2>
+        <ul>
+            {% for assignment in assignments %}
+                <li>
+                    <strong>{{ assignment.title }}</strong>
+                    <br>
+                    <span class="due-date">Due: {{ assignment.due_date }}</span>
+                    {% if assignment.closed %}
+                        <span class="status closed">Assignment Closed</span>
+                    {% else %}
+                        {% if assignment.due_date < now %}
+                            <span class="status overdue">Deadline Passed</span>
+                            {% if assignment.allow_late_turn_in %}
+                                <a href="{% url 'late_turn_in' assignment.id %}" class="late-link">Submit Late</a>
+                            {% else %}
+                                <p>Waiting for the teacher to allow late turn-in.</p>
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'submit_assignment' assignment.id %}" class="action-link">Submit Assignment</a>
+                        {% endif %}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</assignments>
+
+<style>
+    assignments {
+        display: block;
+        background-color: #1F2937; /* Dark background, matching the nav bar */
+        color: #FFFFFF; /* White text */
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+        margin: 20px auto;
+        max-width: 900px;
+        text-align: center;
+    }
+
+    assignments h1 {
+        color: #FFFFFF;
+        margin-bottom: 20px;
+    }
+
+    assignments nav {
+        background-color: #374151; /* Lighter than the main background */
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+    }
+
+    assignments nav a {
+        color: #FFFFFF;
+        margin: 0 15px;
+        text-decoration: none;
+        font-size: 1.2rem;
+    }
+
+    assignments nav a:hover {
+        text-decoration: none;
+        color: #E5E7EB; /* Light hover effect */
+    }
+
+    assignments .assignment-details {
+        background-color: #374151; /* Slightly lighter than container */
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        text-align: left;
+    }
+
+    assignments .assignment-details ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    assignments .assignment-details li {
+        margin: 10px 0;
+        padding: 10px;
+        background-color: #1F2937;
+        border-radius: 5px;
+    }
+
+    assignments .assignment-details strong {
+        font-size: 1.2rem;
+        display: block;
+    }
+
+    assignments ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    assignments .assignment {
+        background-color: #374151; /* Dark background for each assignment block */
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    assignments .assignment strong {
+        font-size: 1.2rem;
+        color: #E5E7EB;
+    }
+
+    assignments .assignment p {
+        margin: 5px 0;
+    }
+
+    assignments .status {
+        margin-top: 10px;
+    }
+
+    assignments .status.not-submitted {
+        color: #DC2626; /* Red for not submitted */
+    }
+
+    assignments .status.submitted {
+        color: #10B981; /* Green for submitted */
+    }
+
+    assignments .action-link {
+        display: inline-block;
+        background-color: #4CAF50; /* Green button for submission */
+        color: white;
+        text-decoration: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        margin-top: 10px;
+        font-size: 1rem;
+        transition: background-color 0.3s ease;
+    }
+    assignments .late-link {
+        display: inline-block;
+        background-color: #af7a4c; /* Green button for submission */
+        color: white;
+        text-decoration: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        margin-top: 10px;
+        font-size: 1rem;
+        transition: background-color 0.3s ease;
+    }
+
+    assignments .action-link:hover {
+        background-color: #45a049; /* Hover color */
+    }
+
+    assignments .no-assignments {
+        color: #E5E7EB;
+        font-size: 1.1rem;
+    }
+</style>
+{% endblock %}

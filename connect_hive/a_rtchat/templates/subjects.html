@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block layout %}
+<subjects>
+    <h1>Subjects for Channel: {{ channel.name }}</h1>
+
+    {% if subjects %}
+        <ul>
+            {% for subject in subjects %}
+                <li>
+                    <a href="{% url 'subject_general' channel.id subject.id %}" class="subject-link">
+                        {{ subject.name }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="empty-message">No subjects are associated with this channel.</p>
+    {% endif %}
+</subjects>
+
+<style>
+    subjects {
+        display: block;
+        background-color: #1F2937; /* Same as nav bar color */
+        color: #FFFFFF; /* White text */
+        padding: 20px;
+        border-radius: 12px; /* Rounded corners for the entire section */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+        margin: 20px auto;
+        max-width: 800px;
+        text-align: center; /* Center-align text inside */
+    }
+
+    subjects h1 {
+        color: #FFFFFF; /* White headings */
+        margin-bottom: 20px;
+    }
+
+    subjects ul {
+        list-style-type: none; /* Remove bullet points */
+        padding: 0;
+        margin: 10px 0;
+    }
+
+    subjects li {
+        margin: 10px 0; /* Space between each subject */
+    }
+
+    a.subject-link {
+        display: inline-block;
+        background-color: #374151; /* Slightly lighter than container */
+        color: #FFFFFF; /* White text */
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        transition: background-color 0.3s, transform 0.3s;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* Add shadow for emphasis */
+    }
+
+    a.subject-link:hover {
+        background-color: #4B5563; /* Hover color */
+        transform: translateY(-2px); /* Slight lift on hover */
+    }
+
+    .empty-message {
+        font-size: 1.2rem;
+        color: #FF6B6B; /* Soft red for emphasis */
+        margin-top: 20px;
+    }
+</style>
+{% endblock %}

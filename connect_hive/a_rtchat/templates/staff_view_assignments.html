@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% load static %}
+
+{% block layout %}
+<assignments>
+    <h1>Assignments for {{ subject.name }} in {{ channel.name }}</h1>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="{% url 'subject_general' channel.id subject.id %}" class="nav-link">General</a>
+        <a href="{% url 'subject_files' channel.id subject.id %}" class="nav-link">Files</a>
+        {% if user.is_staff %}
+        <a href="{% url 'staff_view_assignments' channel.id subject.id %}">Assignments</a>
+        {% else %}
+        <a href="{% url 'view_assignment' channel.id subject.id %}">Assignments</a>
+        {% endif %}
+    </nav>
+
+    <!-- Assignment List Section -->
+    <div class="assignment-details">
+        <h2>Manage Assignments</h2>
+        <ul>
+            {% for assignment in assignments %}
+                <li>
+                    <strong>{{ assignment.title }}</strong>
+                    <br>
+                    <span class="due-date">Due: {{ assignment.due_date }}</span>
+
+                    {% if assignment.closed %}
+                        <span class="status closed">Assignment Closed</span>
+                    {% else %}
+                        {% if assignment.due_date < now %}
+                            <span class="status overdue">Deadline Passed</span>
+                            <p>Late Turn-In Status: 
+                                {% if assignment.allow_late_turn_in %}
+                                    <strong>Allowed</strong>
+                                {% else %}
+                                    <strong>Not Allowed</strong>
+                                {% endif %}
+                            </p>
+                            <div class="action-buttons">
+                                {% if not assignment.allow_late_turn_in %}
+                                    <a href="{% url 'allow_late_turn_in' assignment.id %}" class="late-link">Allow Late Turn-In</a>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <span class="status active">Active</span>
+                        {% endif %}
+                    {% endif %}
+
+                    <div class="view-box">
+                        <a href="{% url 'view_submissions' assignment.id %}" class="view-link">View Submissions</a>
+                        <a href="{% url 'close_assignment' assignment.id %}" class="close-link">Close Assignment</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Upload/Create Assignment Section -->
+    <div class="submission-form">
+        <a href="{% url 'create_assignment' channel.id subject.id %}" class="submit-btn">
+            Create Assignment
+        </a>
+    </div>
+</assignments>
+
+<style>
+    assignments {
+        display: block;
+        background-color: #1F2937; /* Dark background */
+        color: #FFFFFF; /* White text */
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+        margin: 20px auto;
+        max-width: 900px;
+        text-align: center;
+    }
+
+    assignments h1 {
+        color: #FFFFFF; /* White heading */
+    }
+
+    /* Navigation Bar Styles */
+    assignments nav {
+        background-color: #374151; /* Slightly lighter than the main background */
+        padding: 10px;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+    }
+
+    assignments nav a {
+        color: #FFFFFF;
+        margin: 0 15px;
+        text-decoration: none;
+        font-size: 1.2rem;
+    }
+
+    assignments nav a:hover {
+        text-decoration: none;
+        color: #E5E7EB; /* Light hover effect */
+    }
+
+    /* Assignment List Section */
+    assignments .assignment-details {
+        background-color: #374151; /* Slightly lighter than container */
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        text-align: left;
+    }
+
+    assignments .assignment-details ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    assignments .assignment-details li {
+        margin: 10px 0;
+        padding: 10px;
+        background-color: #1F2937;
+        border-radius: 5px;
+    }
+
+    assignments .assignment-details strong {
+        font-size: 1.2rem;
+        display: block;
+    }
+
+    assignments .due-date {
+        font-size: 1rem;
+        color: #9CA3AF; /* Gray color for due date */
+    }
+
+    assignments .view-box {
+        margin-top: 10px;
+    }
+
+    assignments .view-link {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #4CAF50; /* Green button */
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    assignments .late-link {
+        display: inline-block;
+        background-color: #af7a4c; /* Green button for submission */
+        color: white;
+        text-decoration: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        margin-top: 10px;
+        font-size: 1rem;
+        transition: background-color 0.3s ease;
+    }
+    assignments .close-link {
+        display: inline-block;
+        background-color: #ed3434; /* Green button for submission */
+        color: white;
+        text-decoration: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        margin-top: 10px;
+        font-size: 1rem;
+        transition: background-color 0.3s ease;
+    }
+
+    assignments .view-link:hover {
+        background-color: #45a049; /* Hover color */
+    }
+
+    /* Submission Form Button */
+    assignments .submission-form {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    assignments .submit-btn {
+        padding: 10px 15px;
+        background-color: #4CAF50; /* Green button */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 1rem;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    assignments .submit-btn:hover {
+        background-color: #45a049; /* Hover color */
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,9 @@
+<ul>
+    {% for subject in channel.subjects.all %}
+        <li>
+            {{ subject.name }}
+            <a href="{% url 'subject_general' channel.id subject.id %}">General</a>
+            <a href="{% url 'subject_files' channel.id subject.id %}">Files</a>
+        </li>
+    {% endfor %}
+</ul>

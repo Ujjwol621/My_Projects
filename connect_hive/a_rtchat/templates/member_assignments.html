@@ -1,0 +1,25 @@
+<html>
+<head>
+    <title>Assignments for {{ subject.name }} in {{ channel.name }}</title>
+</head>
+<body>
+    <h1>Assignments for {{ subject.name }} in {{ channel.name }}</h1>
+
+    <ul>
+        {% for assignment in assignments %}
+            <li>
+                <strong>{{ assignment.title }}</strong> - Due: {{ assignment.due_date }}
+                <br>
+                {% if assignment.id in submitted_assignment_ids %}
+                    <p>Status: Submitted</p>
+                    <a href="{{ submissions_dict[assignment.id].file.url }}" target="_blank">View Submission</a>
+                {% else %}
+                    <a href="{% url 'submit_assignment' assignment.id %}">Submit Assignment</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
+

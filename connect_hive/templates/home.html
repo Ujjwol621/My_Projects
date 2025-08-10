@@ -1,0 +1,154 @@
+{% extends 'layouts/blank.html' %}
+{% include 'includes/header.html' %}
+{% block content %}
+<home>
+    <div class="hero-section">
+        <h1>Welcome to Connect Hive</h1>
+        <p>Your platform to connect, collaborate, and learn</p>
+        <a href="#features" class="cta-button">Explore Features</a>
+    </div>
+
+    <div id="features" class="features-section">
+        <h2>Key Features</h2>
+        <div class="feature-cards">
+            <div class="feature-card">
+                <h3>Chat & Connect</h3>
+                <p>Stay connected with your peers and teachers. Send messages, share files, and collaborate in real-time.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Assignments</h3>
+                <p>Teachers can create and manage assignments, while students can easily submit their work.</p>
+            </div>
+            <div class="feature-card">
+                <h3>File Sharing</h3>
+                <p>Share your important files seamlessly with others, whether it's an assignment or a resource.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="cta-section">
+        <h2>Join Connect Hive today</h2>
+        <a href="/signup" class="cta-button">Sign Up</a>
+    </div>
+</home>
+
+<style>
+    home {
+        font-family: 'Arial', sans-serif;
+        color: #fff;
+        text-align: center;
+    }
+
+    .hero-section {
+        background: linear-gradient(to right, #4caf50, #0d47a1);
+        color: #fff;
+        padding: 100px 20px;
+        animation: fadeIn 2s ease-in;
+    }
+
+    .hero-section h1 {
+        font-size: 3.5rem;
+        margin-bottom: 20px;
+        animation: slideIn 1s ease-out;
+    }
+
+    .hero-section p {
+        font-size: 1.25rem;
+        margin-bottom: 40px;
+        animation: fadeIn 1.5s ease-in;
+    }
+
+    .cta-button {
+        padding: 12px 25px;
+        background-color: #4CAF50;
+        color: #fff;
+        font-size: 1.1rem;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .cta-button:hover {
+        background-color: #45a049;
+        transform: translateY(-3px);
+    }
+
+    .features-section {
+        padding: 50px 20px;
+        background-color: #374151;
+    }
+
+    .features-section h2 {
+        font-size: 2.5rem;
+        margin-bottom: 40px;
+    }
+
+    .feature-cards {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+    }
+
+    .feature-card {
+        background-color: #1F2937;
+        padding: 30px;
+        border-radius: 12px;
+        width: 250px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        text-align: left;
+        animation: scaleUp 0.5s ease-out;
+    }
+
+    .feature-card h3 {
+        font-size: 1.75rem;
+        margin-bottom: 15px;
+    }
+
+    .feature-card p {
+        font-size: 1rem;
+        color: #e5e7eb;
+    }
+
+    .cta-section {
+        padding: 50px 20px;
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .cta-section h2 {
+        font-size: 2.5rem;
+        margin-bottom: 30px;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(-100%);
+        }
+        to {
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes scaleUp {
+        from {
+            transform: scale(0.9);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+</style>
+
+{% endblock %}

@@ -1,0 +1,96 @@
+subject-general {
+    display: block;
+    background-color: #1F2937;
+    color: #FFFFFF;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    margin: 20px auto;
+    max-width: 900px;
+    text-align: center;
+}
+
+subject-general h1, subject-general h2 {
+    color: #FFFFFF;
+}
+
+subject-general nav {
+    background-color: #374151;
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 8px;
+}
+
+subject-general nav a {
+    color: #FFFFFF;
+    margin: 0 15px;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+subject-general nav a:hover {
+    text-decoration: none;
+    color: #E5E7EB;
+}
+
+subject-general .content-wrapper {
+    margin-top: 20px;
+    text-align: left;
+}
+
+subject-general .post {
+    background-color: #374151;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+subject-general .post h4 {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    color: #E5E7EB;
+}
+
+subject-general .reply {
+    margin-top: 10px;
+    padding-left: 20px;
+    border-left: 2px solid #E5E7EB;
+}
+
+subject-general textarea {
+    background-color: #374151;
+    color: #FFFFFF;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+subject-general textarea:hover {
+    border-color: #4B5563;
+}
+
+subject-general button {
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+subject-general button:hover {
+    background-color: #45a049;
+}
+
+subject-general form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 600px;
+    margin: 20px 0;
+}

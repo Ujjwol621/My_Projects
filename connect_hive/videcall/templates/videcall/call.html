@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% block layout %}
+<div class="flex space-x-4 mt-4">
+    <button id="start-video-call" class="bg-blue-500 text-white py-2 px-4 rounded">Video Call</button>
+    <button id="start-audio-call" class="bg-green-500 text-white py-2 px-4 rounded">Audio Call</button>
+    <button id="end-call" class="bg-red-500 text-white py-2 px-4 rounded hidden">End Call</button>
+</div>
+
+<div id="videos" class="grid grid-cols-3 gap-4 mt-6">
+    <div>
+        <video id="local-video" autoplay playsinline muted class="hidden"></video>
+        <p class="text-center">You</p>
+    </div>
+</div>
+
+<script>
+    const startVideoCallButton = document.getElementById('start-video-call');
+    const startAudioCallButton = document.getElementById('start-audio-call');
+    const endCallButton = document.getElementById('end-call');
+    const videosContainer = document.getElementById('videos');
+    const localVideo = document.getElementById('local-video');
+
+    let localStream, peerConnections = {};
+    const roomName = "{{ room_name }}"; // Provided by the backend
+    const userId = Math.random().toString(36).substring(2, 15); // Unique ID for the user
+    const signalingSocket = new WebSocket(`wss://${window.location.host}/ws/call/${roomName}/`);
+    const servers = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
+
+    signalingSocket.onmessage = async (event) => {
+        const data = JSON.parse(event.data);
+
+        if (data.offer && !peerConnections[data.user]) {
+            createPeerConnection(data.user);
+            await peerConnections[data.user].setRemoteDescription(new RTCSessionDescription(data.offer));
+            const answer = await peerConnections[data.user].createAnswer();
+            await peerConnections[data.user].setLocalDescription(answer);
+            signalingSocket.send(JSON.stringify({ type: "answer", answer: peerConnections[data.user].localDescription, user: userId }));
+        } else if (data.answer) {
+            await peerConnections[data.user].setRemoteDescription(new RTCSessionDescription(data.answer));
+        } else if (data.candidate) {
+            peerConnections[data.user].addIceCandidate(new RTCIceCandidate(data.candidate));
+        } else if (data.endCall) {
+            removeRemoteStream(data.user);
+        }
+    };
+
+    const createPeerConnection = (user) => {
+        const pc = new RTCPeerConnection(servers);
+
+        pc.onicecandidate = ({ candidate }) => {
+            if (candidate) {
+                signalingSocket.send(JSON.stringify({ type: "candidate", candidate, user: userId }));
+            }
+        };
+
+        pc.ontrack = (event) => {
+            const video = document.createElement('video');
+            video.id = `remote-video-${user}`;
+            video.autoplay = true;
+            video.playsInline = true;
+            video.srcObject = event.streams[0];
+            videosContainer.appendChild(video);
+
+            const label = document.createElement('p');
+            label.textContent = `User: ${user}`;
+            label.className = 'text-center';
+            videosContainer.appendChild(label);
+        };
+
+        peerConnections[user] = pc;
+    };
+
+    const startCall = async (videoEnabled) => {
+        localStream = await navigator.mediaDevices.getUserMedia({
+            video: videoEnabled,
+            audio: true
+        });
+        localVideo.srcObject = localStream;
+        localVideo.classList.remove('hidden');
+
+        // Add local tracks to all existing peer connections
+        for (let user in peerConnections) {
+            localStream.getTracks().forEach((track) => peerConnections[user].addTrack(track, localStream));
+        }
+
+        // Notify the server to broadcast the join event
+        signalingSocket.send(JSON.stringify({ type: "join", user: userId }));
+
+        endCallButton.classList.remove('hidden');
+    };
+
+    const endCall = () => {
+        if (localStream) {
+            localStream.getTracks().forEach((track) => track.stop());
+        }
+
+        for (let user in peerConnections) {
+            peerConnections[user].close();
+            removeRemoteStream(user);
+        }
+
+        peerConnections = {};
+        localVideo.classList.add('hidden');
+        localVideo.srcObject = null;
+
+        signalingSocket.send(JSON.stringify({ type: "endCall", user: userId }));
+        endCallButton.classList.add('hidden');
+    };
+
+    const removeRemoteStream = (user) => {
+        const video = document.getElementById(`remote-video-${user}`);
+        if (video) {
+            video.remove();
+        }
+    };
+
+    startVideoCallButton.onclick = () => startCall(true);
+    startAudioCallButton.onclick = () => startCall(false);
+    endCallButton.onclick = endCall;
+</script>
+{% endblock %}

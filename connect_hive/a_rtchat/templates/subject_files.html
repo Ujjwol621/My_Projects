@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load tz %}
+
+{% block layout %}
+<subject-files>
+    <h1>Files for {{ subject.name }} in {{ channel.name }}</h1>
+
+    <nav>
+        <a href="{% url 'subject_general' channel.id subject.id %}">General</a>
+        <a href="{% url 'subject_files' channel.id subject.id %}">Files</a>
+        {% if user.is_staff %}
+        <!-- For Staff: Link to staff assignments view -->
+        <a href="{% url 'staff_view_assignments' channel.id subject.id %}">Assignments</a>
+        {% else %}
+        <!-- For Non-Staff: Link to student assignments view -->
+        <a href="{% url 'view_assignment' channel.id subject.id %}">Assignments</a>
+        {% endif %}
+    </nav>
+
+    <div class="content-wrapper">
+        <h2>Files</h2>
+        {% for file in files %}
+            <div class="file">
+                <p><strong>{{ file.filename }}</strong></p>
+                <a href="{{ file.file.url }}" download>Download</a>
+                <p>{{ file.description }}</p>
+                <small>Uploaded by {{ file.uploaded_by.username }} on {{ file.uploaded_at|timezone:"Asia/Kathmandu" }}</small>
+            </div>
+        {% endfor %}
+
+        <h2>Upload a File</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Manually render the file input and description fields -->
+            <div class="file-upload">
+                <input type="file" name="file" required />
+                <textarea name="description" placeholder="File description" required></textarea>
+            </div>
+            
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+</subject-files>
+
+<style>
+    subject-files {
+        display: block;
+        background-color: #1F2937; /* Dark background, matching the nav bar */
+        color: #FFFFFF; /* White text */
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+        margin: 20px auto;
+        max-width: 900px;
+        text-align: center;
+    }
+
+    subject-files h1, subject-files h2 {
+        color: #FFFFFF;
+    }
+
+    subject-files nav {
+        background-color: #374151; /* Lighter than the main background */
+        padding: 10px;
+        margin-top: 20px;
+        border-radius: 8px;
+    }
+
+    subject-files nav a {
+        color: #FFFFFF;
+        margin: 0 15px;
+        text-decoration: none;
+        font-size: 1.2rem;
+    }
+
+    subject-files nav a:hover {
+        text-decoration: none;
+        color: #E5E7EB; /* Light hover effect */
+    }
+
+    subject-files .content-wrapper {
+        margin-top: 20px;
+        text-align: left;
+    }
+
+    subject-files .file {
+        background-color: #374151; /* Dark background for each file entry */
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    subject-files .file a {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    subject-files .file a:hover {
+        text-decoration: underline;
+    }
+
+    /* Styling for form inputs and file upload box */
+    subject-files .file-upload input[type="file"],
+    subject-files .file-upload textarea {
+        background-color: #374151; /* Matching background */
+        color: #FFFFFF; /* White text */
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+    }
+
+    subject-files .file-upload input[type="file"]:hover,
+    subject-files .file-upload textarea:hover {
+        border-color: #4B5563; /* Slightly lighter border on hover */
+    }
+
+    subject-files button {
+        padding: 10px 15px;
+        background-color: #4CAF50; /* Green button for uploading files */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    subject-files button:hover {
+        background-color: #45a049; /* Hover color */
+    }
+
+    /* Styling for the form */
+    subject-files form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 600px;
+        margin: 20px 0;
+    }
+</style>
+{% endblock %}
