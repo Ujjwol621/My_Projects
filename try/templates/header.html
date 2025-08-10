@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" contnent="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Typing_Speed</title>
+       <link rel="stylesheet" href="static\style.css\">
+     </head>
+    <body style="background-color: rgb(76, 76, 76);">
+        <header>
+            <a id="headlogo" href="/"><img src="static\logo.png" height=39px>Typing_speed</a>
+            <a id="leader" href="{% url 'leaderboard' %}"><img src="static\lead.png" height=25px></a>
+            <a id="leader" href="{% url 'about' %}"><img src="static\about.png" height=25px></a>
+            {%if user.is_authenticated%}
+            {% comment %} <a id="leader"><img src="static\setting.png" height=25px></a> {% endcomment %}
+            <a style="margin-left:560px;">Welcome {{user.first_name}}</a>
+            <a href='signout'><img src="static\logout.png" height=25px></a>
+            {% else %}
+            <a id="acc" href="{% url 'login' %}"><img src="static\login.png" height=25px></a> 
+            {% endif%}
+        </header>

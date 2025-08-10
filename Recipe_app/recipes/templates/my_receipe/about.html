@@ -1,0 +1,46 @@
+{% extends 'my_receipe/base.html' %}{% load static %}
+{% block content %}
+<style>
+    .times-new-roman {
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 24px;
+        color: #333;
+        font-weight: normal;
+        text-align: left;
+    }
+    .about-image {
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 20px;
+    }
+</style>
+<div class="container">
+    <h2>About Us</h2>
+    <p class="times-new-roman">Welcome to "Hamro Recipe Haru", a recipes sharing platform! Our project allows users to explore and share delicious recipes with each other. Whether you're a seasoned chef or a cooking enthusiast, our platform provides a space for you to discover new recipes and connect with other users who share your passion for cooking.</p>
+    <h2>Key Features</h2>
+    <ul class="times-new-roman">
+        <li>Browse and search recipes from all users in the same local network</li>
+        <li>Create, update, and delete your own recipes</li>
+        <li>Secure user authentication system for registrations and logins</li>
+    </ul>
+    <img src="{% static 'images/recipe_about1.jpg' %}" alt="About Image 1" class="about-image">
+    <h2>Technologies Used</h2>
+    <p class="times-new-roman">This project is built using the following technologies:</p>
+    <ul class="times-new-roman">
+        <li>Python/Django for backend development</li>
+        <li>HTML/CSS/ for frontend development</li>
+        <li>SQLite database for storing recipe data</li>
+    </ul>
+    <img src="{% static 'images/recipe_about2.jpg' %}" alt="About Image 2" class="about-image">
+    <h2>Future Plans</h2>
+    <p class="times-new-roman">We are continuously working on improving our platform and adding new features to enhance the user experience. In the future, we plan to introduce features such as:</p>
+    <ul class="times-new-roman">
+        <li>Advanced search functionality to filter recipes by ingredients, cuisines, and dietary preferences</li>
+        <li>Integration with social media platforms for easier sharing and networking</li>
+        <li>Recipe recommendation system based on user preferences and activity</li>
+        <li>Interact with other users by commenting and rating recipes</li>
+    </ul>
+    <p class="times-new-roman">Thank you for being a part of our recipe-sharing community!</p>
+</div>
+{% endblock content %}
+

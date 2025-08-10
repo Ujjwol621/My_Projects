@@ -1,0 +1,28 @@
+{% extends 'my_receipe/base.html' %}
+{% block content %}
+<h3>{{greeting}}{{ request.user.username}}</h3>
+<h1 style="text-align: center;">Hamro Recipe Haru</h1>
+<form method="GET" action="{% url 'recipe-search' %}" style="margin-bottom: 20px;">
+    {% csrf_token %}
+    <input type="text" name="q" placeholder="Search for recipes..." style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; width: 200px;">
+    <button type="submit" style="padding: 10px 20px; background-color: #03041b; color: #fff; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">Search</button>
+</form>
+<div class="card-container">
+    {% for recipe in recipes %}
+    <div class="card my-4" style="width: 18rem; display: inline-block; margin-right: 10px;">
+        {% if recipe.photo %}
+            <img src="{{ recipe.photo.url }}" class="card-img-top" alt="{{ recipe.title }}">
+        {% endif %}
+        <div class="card-body">
+            <h5 class="card-title">{{ recipe.title }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Author: {{ recipe.author }}</h6>
+            <p class="card-text"><b>Ingredients:</b><br>{{ recipe.ingredients|truncatechars:50 }}</p>
+            <p class="card-text"><b>Instructions:</b><br>{{ recipe.description|truncatechars:50 }}</p>
+            <h6 class="card-subtitle mb-2 text-muted">Last Updated: {{ recipe.updated_at|date:"F d, Y" }}</h6>
+            <a href="{% url 'receipe-detail' pk=recipe.pk %}" class="card-link" 
+                style="color: #128acb; text-decoration: none; font-weight: bolder;">View Full Recipe</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}

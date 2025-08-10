@@ -1,0 +1,15 @@
+{% extends "base.html"%}
+{% block content %}
+    <title>Typing Speed Test Results</title>
+</head>
+<body >
+    <h1 style="display:inline">Typing Speed Test Results</h1>
+    {%if user.is_authenticated%}
+    <p style="margin-left:560px; color:red">All time best:</p>
+    <a style="margin-left:560px; displa:inline">wpm: {{user.wpm}}</a>
+    <a style="margin-left:60px;">accuracy: {{user.accuracy}}</a>
+    {% endif%}
+    <p>Words Per Minute (WPM): {{ wpm }}</p>
+    <p>Accuracy: {{ accuracy }}%</p>
+    <a href="{% url 'start'%}"><img src="static\image.png" height=25px></a>
+{% endblock %}

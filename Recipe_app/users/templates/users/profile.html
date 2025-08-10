@@ -1,0 +1,38 @@
+{% extends 'my_receipe/base.html' %}
+{% block content %}
+<style>
+    .times-new-roman {
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 24px;
+        color: #333;
+        font-weight: normal;
+        text-align: left;
+    }
+</style>
+<div class="container">
+    <h1 class="times-new-roman" style="font-size: 27px"><br><b>My Profile</b></h1>
+    <h1 class="times-new-roman">Username : {{ user.username }}</h1>
+    <h1 class="times-new-roman">Email : {{ user.email }}</h1>
+    <h1 class="times-new-roman">Firstname : {{ user.first_name }}</h1>
+    <h1 class="times-new-roman">Lastname : {{ user.last_name }}</h1>
+    <h2 class="times-new-roman" style="font-size: 27px"><br><b>My Recipes:</b></h2>
+    <div class="card-container">
+        {% for recipe in user_recipes %}
+        <div class="card my-4" style="width: 18rem; display: inline-block; margin-right: 10px;">
+            {% if recipe.photo %}
+            <img src="{{ recipe.photo.url }}" class="card-img-top" alt="{{ recipe.title }}">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ recipe.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Author: {{ recipe.author }}</h6>
+                <p class="card-text"><b>Ingredients:</b><br>{{ recipe.ingredients|truncatechars:50 }}</p>
+                <p class="card-text"><b>Instructions:</b><br>{{ recipe.description|truncatechars:50 }}</p>
+                <h6 class="card-subtitle mb-2 text-muted">Last Updated: {{ recipe.updated_at|date:"F d, Y" }}</h6>
+                <a href="{% url 'receipe-detail' pk=recipe.pk %}" class="card-link" 
+                    style="color: #128acb; text-decoration: none; font-weight: bolder;">View Full Recipe</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

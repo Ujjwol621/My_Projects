@@ -1,0 +1,18 @@
+{% extends 'my_receipe/base.html' %}{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Register!</legend>
+            {{ form|crispy }}
+        </fieldset>
+        <div class="form-group py-3">
+            <button class="btn btn-outline-primary" type="submit">Sign Up</button>
+        </div>
+    </form>
+    <div class="border-top pt-3">
+        <a href="{% url 'user-login' %}">Already have an account? Log in here.</a>
+    </div>      
+</div>
+{% endblock content %}

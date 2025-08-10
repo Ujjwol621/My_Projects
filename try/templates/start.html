@@ -1,0 +1,53 @@
+{% extends "base.html"%}
+{% block content %}
+        <div di="i">
+            <div id="j"> 
+                <a id="snd">@ time</a>
+            </div>    
+        </div>
+        <div id="myclass">
+            <style>
+                #typed-text {
+                    color: white;
+                    background-color: #333;
+                    padding: 10px;
+                    margin-bottom: 10px;
+                }
+                #user-input, #timer {
+                    margin-bottom: 10px;
+                }
+            </style>
+        </head>
+        <body>
+            <h1 style="display: block; text-align: center;">Typing Speed Test</h1>
+            <p id="text">{{ paragraph }}</p>
+    <form action="result" method="post">
+        {% csrf_token %}
+        <textarea id="typedText" name="typedText" rows="5" cols="50"></textarea><br>
+        <input type="hidden" name="text" value="{{ paragraph }}">
+    </form>
+    <p id="timer">Time remaining: 30 seconds</p>
+    <a  href="{% url 'start'%}" style="display: block; text-align: center;" ><img src="static\image.png" height=25px></a>
+    <script>
+        var timeLeft = 30;
+        var timerInterval;
+
+        document.getElementById('typedText').addEventListener('input', function() {
+            if (!timerInterval) {
+                timerInterval = setInterval(updateTimer, 1000);
+            }
+        });
+        
+        function updateTimer() {
+            timeLeft--;
+            document.getElementById('timer').textContent = 'Time remaining: ' + timeLeft + ' seconds';
+            if (timeLeft === 0) {
+                clearInterval(timerInterval);
+                document.forms[0].submit();
+            }
+        }
+        window.onload = function() {
+            document.getElementById('typedText').focus();
+        };
+    </script>
+        {% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html"%}
+{% block content %}
+{% if login_success_message %}
+            <p style="color: green;">{{ login_success_message }}</p>
+        {% endif %}
+        <div di="i">
+            <div id="j"> 
+                <a id="snd">@ time</a>
+            </div>    
+        </div>
+        <div id="myclass" style="display: flex; justify-content: center; align-items: center;">
+            <a id="start" href="{% url 'start'%}">Start Typing Test</a>    
+        </div>
+        {% endblock %}

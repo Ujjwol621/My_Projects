@@ -1,0 +1,25 @@
+{% extends "base.html"%}
+{% block content %}
+    <title>Leaderboard</title>
+</head>
+<body>
+    <h1>Leaderboard</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>WPM</th>
+                <th>Accuracy (%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for profile in user_profiles %}
+                <tr>
+                    <td>{{ profile.username }}</td>
+                    <td>{{ profile.wpm }}</td>
+                    <td>{{ profile.accuracy }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

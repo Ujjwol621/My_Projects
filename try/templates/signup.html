@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <link rel="stylesheet" href="static\style.css\">
+</head>
+<body>
+    <div class="container">
+        {% if error %}
+            <p style="color: red;">{{ error }}</p>
+        {% endif %}
+        <h2>Signup</h2>
+        <form action="/signup" method="post">
+            {% csrf_token %}
+            <label for="">Firstname</label>
+            <input style="color: black" type="text" id="fname" name="fname" placeholder="firstname" required>
+            <br>
+            <label for="">Lastname</label>
+            <input style="color: black" type="text" id="lname" name="lname" placeholder="lastname" required>
+            <br>
+            <label for="">Username</label>
+            <input style="color: black" type="text" id="username" name="username" placeholder="Username" required>
+            <br>
+            <label for="">Email</label>
+            <input style="color: black" type="text" id="email" name="email" placeholder="someone@gmail.com" required>
+            <br>
+            <label for="">Password</label>
+            <input style="color: black" type="password" id="password1" name="password1" placeholder="Password" required>
+            <br>
+            <label for="">Confirm password</label>
+            <input style="color: black" type="password" id="password2" name="password2" placeholder="Confirm Password" required>
+            <br>
+            <button type="submit" class="btn btn-primary" value="Submit" style="background:black">Signup</button>
+        </form>
+        <script src="" async defer></script>
+        <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+    </div>
+</body>
+</html>
